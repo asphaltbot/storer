@@ -33,8 +33,7 @@ func UploadFile(c *gin.Context) {
 		dir = "D:\\"
 	}
 
-
-	err := c.SaveUploadedFile(file, dir + id + filepath.Ext(file.Filename))
+	err := c.SaveUploadedFile(file, dir+id+filepath.Ext(file.Filename))
 
 	if err != nil {
 		c.AbortWithStatusJSON(200, gin.H{"code": 500, "message": "Unable to save uploaded file: " + err.Error()})
@@ -62,7 +61,7 @@ func DeleteFileByID(c *gin.Context) {
 		return
 	}
 
-	if len(fileMatch) == 0{
+	if len(fileMatch) == 0 {
 		c.AbortWithStatusJSON(200, gin.H{"code": 404, "message": "That file could not be found"})
 		return
 	}
@@ -95,12 +94,16 @@ func FetchFileByID(c *gin.Context) {
 		return
 	}
 
-	if len(fileMatch) == 0{
+	if len(fileMatch) == 0 {
 		c.AbortWithStatusJSON(200, gin.H{"code": 404, "message": "That file could not be found"})
 		return
 	}
 
 	extension := path.Ext(fileMatch[0])
-	c.FileAttachment(fileMatch[0], fileID + extension)
 
+	if extension == ".png" || extension == ".jpg" || extension == ".bmp" || extension == ".gif" {
+		c.File(fileMatch[0])
+	} else {
+		c.FileAttachment(fileMatch[0], fileID+extension)
+	}
 }
