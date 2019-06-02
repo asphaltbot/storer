@@ -10,6 +10,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -73,6 +74,8 @@ func DownloadFile(c *gin.Context) {
 		c.AbortWithStatusJSON(200, gin.H{"code": 500, "message": "Unable to get extension for: " + urlDownload.URL})
 		return
 	}
+
+	extension = strings.Split(extension, "?")[0]
 
 	out, err := os.Create(dir + id + extension)
 
